@@ -1,0 +1,76 @@
+{
+  "keanu": {
+    "Monday": {
+      "breakfast": "strawberries, bread and milk",
+      "lunch": "bread",
+      "dinner": "mac and cheese"
+    },
+    "Tuesday": {
+      "breakfast": "grapes, bread and milk",
+      "lunch": "bread and ham",
+      "dinner": "mac and cheese"
+    },
+    "Wednesday": {
+      "breakfast": "grapes, bread and milk",
+      "lunch": "bread and ham",
+      "dinner": "mac and cheese"
+    },
+    "Thursday": {
+      "breakfast": "grapes, bread and milk",
+      "lunch": "bread and ham",
+      "dinner": "mac and cheese"
+    },
+    "Friday": {
+      "breakfast": "grapes, bread and milk",
+      "lunch": "bread and ham",
+      "dinner": "mac and cheese"
+    },
+    "Saturday": {
+      "breakfast": "grapes, bread and milk",
+      "lunch": "bread and ham",
+      "dinner": "mac and cheese"
+    },
+    "Sunday": {
+      "breakfast": "grapes, bread and milk",
+      "lunch": "bread and ham",
+      "dinner": "mac and cheese"
+    }
+  },
+  "amaru": {
+    "Monday": {
+      "breakfast": "",
+      "lunch": "bread and butter",
+      "dinner": "mac and cheese"
+    },
+    "Tuesday": {
+      "breakfast": "",
+      "lunch": "bread, butter",
+      "dinner": "mac and cheese"
+    },
+    "Wednesday": {
+      "breakfast": "",
+      "lunch": "bread, butter",
+      "dinner": "mac and cheese"
+    },
+    "Thursday": {
+      "breakfast": "",
+      "lunch": "bread, butter",
+      "dinner": "mac and cheese"
+    },
+    "Friday": {
+      "breakfast": "",
+      "lunch": "bread, butter",
+      "dinner": "mac and cheese"
+    },
+    "Saturday": {
+      "breakfast": "",
+      "lunch": "bread, butter",
+      "dinner": "mac and cheese"
+    },
+    "Sunday": {
+      "breakfast": "",
+      "lunch": "bread, butter",
+      "dinner": ""
+    }
+  }
+}

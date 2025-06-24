@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Planner - keanuwong.com</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        .person-section {
+            margin-bottom: 40px;
+        }
+        
+        .person-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .meal-type {
+            background-color: #ecf0f1;
+            font-weight: bold;
+            width: 100px;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+        
+        .save-btn {
+            background-color: #27ae60;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        .save-btn:hover {
+            background-color: #229954;
+        }
+        
+        .status {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        
+        .ingredients-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #ecf0f1;
+        }
+        
+        .ingredients-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .ingredient-column h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .ingredient-list {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            min-height: 200px;
+        }
+        
+        .ingredient-item {
+            padding: 5px 0;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .ingredient-item:last-child {
+            border-bottom: none;
+        }
+        
+        .ingredient-name {
+            font-weight: 500;
+        }
+        
+        .ingredient-count {
+            background-color: #3498db;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            min-width: 20px;
+            text-align: center;
+        }
+        
+        .ingredient-item {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .ingredient-item:hover {
+            background-color: #e3f2fd;
+        }
+        
+        .meal-sources {
+            margin-top: 8px;
+            padding: 8px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border-left: 3px solid #3498db;
+            font-size: 12px;
+            display: none;
+        }
+        
+        .meal-sources.show {
+            display: block;
+        }
+        
+        .meal-source-item {
+            margin: 2px 0;
+            color: #6c757d;
+        }
+        
+        .meal-source-person {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .meal-database-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #ecf0f1;
+        }
+        
+        .database-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .add-meal-form {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .add-meal-btn {
+            background-color: #e67e22;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .add-meal-btn:hover {
+            background-color: #d35400;
+        }
+        
+        .existing-meals {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .meal-database-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+        
+        .meal-db-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .meal-db-item:last-child {
+            border-bottom: none;
+        }
+        
+        .meal-db-name {
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 2px;
+        }
+        
+        .meal-db-ingredients {
+            font-size: 12px;
+            color: #6c757d;
+        }
+        
+        .meal-db-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .delete-meal-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 3px 8px;
+            font-size: 11px;
+            cursor: pointer;
+        }
+        
+        .delete-meal-btn:hover {
+            background-color: #c0392b;
+        }
+        
+        @media (max-width: 768px) {
+            .ingredients-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .database-controls {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Weekly Meal Planner</h1>
+        
+        <div class="person-section">
+            <div class="person-title">Keanu's Meals</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Meal</th>
+                        <th>Monday</th>
+                        <th>Tuesday</th>
+                        <th>Wednesday</th>
+                        <th>Thursday</th>
+                        <th>Friday</th>
+                        <th>Saturday</th>
+                        <th>Sunday</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="meal-type">Breakfast</td>
+                        <td><input type="text" id="keanu-breakfast-mon" placeholder="Enter meal"></td>
+                        <td><input type="text" id="keanu-breakfast-tue" placeholder="Enter meal"></td>
+                        <td><input type="text" id="keanu-breakfast-wed" placeholder="Enter meal"></td>
+                        <td><input type="text" id="keanu-breakfast-thu" placeholder="Enter meal"></td>
+                        <td><input type="text" id="keanu-breakfast-fri" placeholder="Enter meal"></td>
+                        <td><input type="text" id="keanu-breakfast-sat" placeholder="Enter meal"></td>
+                        <td><input type="text" id="keanu-breakfast-sun" placeholder="Enter meal"></td>
+                    </tr>
+                    <tr>
+                        <td class="meal-type">Lunch</td>
+                        <td><input type="text" id="keanu-lunch-mon" placeholder="Enter meal"></td>
+                        <td><input type="text" id="keanu-lunch-tue" placeholder="Enter meal"></td>
+                        <td><input type="text" id="keanu-lunch-wed" placeholder="Enter meal"></td>
+                        <td><input type="text" id="keanu-lunch-thu" placeholder="Enter meal"></td>
+                        <td><input type="text" id="keanu-lunch-fri" placeholder="Enter meal"></td>
+                        <td><input type="text" id="keanu-lunch-sat" placeholder="Enter meal"></td>
+                        <td><input type="text" id="keanu-lunch-sun" placeholder="Enter meal"></td>
+                    </tr>
+                    <tr>
+                        <td class="meal-type">Dinner</td>
+                        <td><input type="text" id="keanu-dinner-mon" placeholder="Enter meal"></td>
+                        <td><input type="text" id="keanu-dinner-tue" placeholder="Enter meal"></td>
+                        <td><input type="text" id="keanu-dinner-wed" placeholder="Enter meal"></td>
+                        <td><input type="text" id="keanu-dinner-thu" placeholder="Enter meal"></td>
+                        <td><input type="text" id="keanu-dinner-fri" placeholder="Enter meal"></td>
+                        <td><input type="text" id="keanu-dinner-sat" placeholder="Enter meal"></td>
+                        <td><input type="text" id="keanu-dinner-sun" placeholder="Enter meal"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="person-section">
+            <div class="person-title">Amaru's Meals</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Meal</th>
+                        <th>Monday</th>
+                        <th>Tuesday</th>
+                        <th>Wednesday</th>
+                        <th>Thursday</th>
+                        <th>Friday</th>
+                        <th>Saturday</th>
+                        <th>Sunday</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="meal-type">Breakfast</td>
+                        <td><input type="text" id="amaru-breakfast-mon" placeholder="Enter meal"></td>
+                        <td><input type="text" id="amaru-breakfast-tue" placeholder="Enter meal"></td>
+                        <td><input type="text" id="amaru-breakfast-wed" placeholder="Enter meal"></td>
+                        <td><input type="text" id="amaru-breakfast-thu" placeholder="Enter meal"></td>
+                        <td><input type="text" id="amaru-breakfast-fri" placeholder="Enter meal"></td>
+                        <td><input type="text" id="amaru-breakfast-sat" placeholder="Enter meal"></td>
+                        <td><input type="text" id="amaru-breakfast-sun" placeholder="Enter meal"></td>
+                    </tr>
+                    <tr>
+                        <td class="meal-type">Lunch</td>
+                        <td><input type="text" id="amaru-lunch-mon" placeholder="Enter meal"></td>
+                        <td><input type="text" id="amaru-lunch-tue" placeholder="Enter meal"></td>
+                        <td><input type="text" id="amaru-lunch-wed" placeholder="Enter meal"></td>
+                        <td><input type="text" id="amaru-lunch-thu" placeholder="Enter meal"></td>
+                        <td><input type="text" id="amaru-lunch-fri" placeholder="Enter meal"></td>
+                        <td><input type="text" id="amaru-lunch-sat" placeholder="Enter meal"></td>
+                        <td><input type="text" id="amaru-lunch-sun" placeholder="Enter meal"></td>
+                    </tr>
+                    <tr>
+                        <td class="meal-type">Dinner</td>
+                        <td><input type="text" id="amaru-dinner-mon" placeholder="Enter meal"></td>
+                        <td><input type="text" id="amaru-dinner-tue" placeholder="Enter meal"></td>
+                        <td><input type="text" id="amaru-dinner-wed" placeholder="Enter meal"></td>
+                        <td><input type="text" id="amaru-dinner-thu" placeholder="Enter meal"></td>
+                        <td><input type="text" id="amaru-dinner-fri" placeholder="Enter meal"></td>
+                        <td><input type="text" id="amaru-dinner-sat" placeholder="Enter meal"></td>
+                        <td><input type="text" id="amaru-dinner-sun" placeholder="Enter meal"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <button class="save-btn" onclick="saveMealPlan()">Save Meal Plan</button>
+        <div id="status" class="status"></div>
+        
+        <div class="ingredients-section">
+            <div class="person-title">Shopping List - Ingredients</div>
+            <div class="ingredients-grid">
+                <div class="ingredient-column">
+                    <h3>Keanu's Ingredients</h3>
+                    <div id="keanu-ingredients" class="ingredient-list"></div>
+                </div>
+                <div class="ingredient-column">
+                    <h3>Amaru's Ingredients</h3>
+                    <div id="amaru-ingredients" class="ingredient-list"></div>
+                </div>
+                <div class="ingredient-column">
+                    <h3>Combined Shopping List</h3>
+                    <div id="combined-ingredients" class="ingredient-list"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="meal-database-section">
+            <div class="person-title">Meal Database - Teach the System New Meals</div>
+            <div class="database-controls">
+                <div class="add-meal-form">
+                    <h3>Add New Meal</h3>
+                    <div class="form-group">
+                        <label for="meal-name">Meal Name:</label>
+                        <input type="text" id="meal-name" placeholder="e.g., tomato spaghetti" />
+                    </div>
+                    <div class="form-group">
+                        <label for="meal-ingredients">Ingredients (comma-separated):</label>
+                        <input type="text" id="meal-ingredients" placeholder="e.g., tomato, spaghetti, pasta sauce, onion" />
+                    </div>
+                    <button class="add-meal-btn" onclick="addMealToDatabase()">Add Meal</button>
+                </div>
+                
+                <div class="existing-meals">
+                    <h3>Current Meal Database</h3>
+                    <div id="meal-database-list" class="meal-database-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+        const meals = ['breakfast', 'lunch', 'dinner'];
+        const people = ['keanu', 'amaru'];
+        
+        // Global meal database
+        let mealDatabase = {};
+        
+        // Parse meal string into individual ingredients using database first
+        function parseMealToIngredients(mealString) {
+            if (!mealString || mealString.trim() === '') {
+                return [];
+            }
+            
+            const lowerMeal = mealString.toLowerCase().trim();
+            
+            // First, check if the exact meal exists in database
+            if (mealDatabase[lowerMeal]) {
+                return [...mealDatabase[lowerMeal]];
+            }
+            
+            // Then check for partial matches (meal database entries contained in the string)
+            for (const [dbMeal, dbIngredients] of Object.entries(mealDatabase)) {
+                if (lowerMeal.includes(dbMeal)) {
+                    // Found a match - use database ingredients and parse any remaining text
+                    const remaining = lowerMeal.replace(dbMeal, '').trim().replace(/^[,;]\s*/, '').replace(/\s*[,;]$/, '');
+                    const otherIngredients = remaining ? parseMealToIngredientsBasic(remaining) : [];
+                    return [...dbIngredients, ...otherIngredients];
+                }
+            }
+            
+            // Fall back to basic parsing if no database match
+            return parseMealToIngredientsBasic(mealString);
+        }
+        
+        // Basic parsing for meals not in database
+        function parseMealToIngredientsBasic(mealString) {
+            if (!mealString || mealString.trim() === '') {
+                return [];
+            }
+            
+            // Split by common delimiters and clean up
+            const ingredients = mealString
+                .split(/[,;]|\band\b/)
+                .map(item => item.trim())
+                .filter(item => item.length > 0)
+                .filter(item => !['with', 'and', '&', 'the', 'a', 'an'].includes(item.toLowerCase()));
+            
+            return ingredients;
+        }
+        
+        // Load meal database
+        async function loadMealDatabase() {
+            try {
+                const response = await fetch('/api/meals-db');
+                if (response.ok) {
+                    mealDatabase = await response.json();
+                    console.log('Loaded meal database from server');
+                } else {
+                    throw new Error('Failed to load from server');
+                }
+            } catch (error) {
+                console.log('Server not available, trying direct file access:', error);
+                try {
+                    const response = await fetch('./meal-database.json');
+                    if (response.ok) {
+                        mealDatabase = await response.json();
+                        console.log('Loaded meal database from file');
+                    } else {
+                        throw new Error('Could not load file');
+                    }
+                } catch (fileError) {
+                    console.log('Could not load meal database, using empty database:', fileError);
+                    mealDatabase = {};
+                }
+            }
+            displayMealDatabase();
+        }
+        
+        // Save meal database
+        async function saveMealDatabase() {
+            try {
+                const response = await fetch('/api/meals-db', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(mealDatabase)
+                });
+                
+                if (response.ok) {
+                    console.log('Meal database saved to server successfully');
+                    return true;
+                } else {
+                    throw new Error('Failed to save to server');
+                }
+            } catch (error) {
+                console.log('Server not available, saving to localStorage:', error);
+                localStorage.setItem('mealDatabase', JSON.stringify(mealDatabase));
+                return false;
+            }
+        }
+        
+        // Add new meal to database
+        async function addMealToDatabase() {
+            const mealName = document.getElementById('meal-name').value.trim().toLowerCase();
+            const ingredientsInput = document.getElementById('meal-ingredients').value.trim();
+            
+            if (!mealName || !ingredientsInput) {
+                alert('Please enter both meal name and ingredients');
+                return;
+            }
+            
+            const ingredients = ingredientsInput
+                .split(',')
+                .map(ingredient => ingredient.trim())
+                .filter(ingredient => ingredient.length > 0);
+            
+            if (ingredients.length === 0) {
+                alert('Please enter valid ingredients');
+                return;
+            }
+            
+            mealDatabase[mealName] = ingredients;
+            await saveMealDatabase();
+            
+            // Clear form
+            document.getElementById('meal-name').value = '';
+            document.getElementById('meal-ingredients').value = '';
+            
+            // Update display
+            displayMealDatabase();
+            updateIngredientDisplays();
+            
+            // Show success message
+            document.getElementById('status').textContent = `Added "${mealName}" to meal database!`;
+            document.getElementById('status').style.color = '#27ae60';
+            setTimeout(() => {
+                document.getElementById('status').textContent = '';
+            }, 3000);
+        }
+        
+        // Delete meal from database
+        async function deleteMealFromDatabase(mealName) {
+            if (confirm(`Are you sure you want to delete "${mealName}" from the meal database?`)) {
+                delete mealDatabase[mealName];
+                await saveMealDatabase();
+                displayMealDatabase();
+                updateIngredientDisplays();
+                
+                document.getElementById('status').textContent = `Deleted "${mealName}" from meal database`;
+                document.getElementById('status').style.color = '#e67e22';
+                setTimeout(() => {
+                    document.getElementById('status').textContent = '';
+                }, 3000);
+            }
+        }
+        
+        // Display meal database
+        function displayMealDatabase() {
+            const container = document.getElementById('meal-database-list');
+            container.innerHTML = '';
+            
+            if (Object.keys(mealDatabase).length === 0) {
+                container.innerHTML = '<div style="color: #6c757d; font-style: italic;">No meals in database</div>';
+                return;
+            }
+            
+            const sortedMeals = Object.entries(mealDatabase)
+                .sort(([a], [b]) => a.localeCompare(b));
+            
+            sortedMeals.forEach(([mealName, ingredients]) => {
+                const mealDiv = document.createElement('div');
+                mealDiv.className = 'meal-db-item';
+                mealDiv.innerHTML = `
+                    <div>
+                        <div class="meal-db-name">${mealName}</div>
+                        <div class="meal-db-ingredients">${ingredients.join(', ')}</div>
+                    </div>
+                    <div class="meal-db-actions">
+                        <button class="delete-meal-btn" onclick="deleteMealFromDatabase('${mealName}')">Delete</button>
+                    </div>
+                `;
+                container.appendChild(mealDiv);
+            });
+        }
+        
+        // Count ingredients across all meals for a person with meal source tracking
+        function getIngredientsForPerson(person, mealData) {
+            const ingredientData = {};
+            
+            if (mealData[person]) {
+                Object.entries(mealData[person]).forEach(([day, dayMeals]) => {
+                    Object.entries(dayMeals).forEach(([mealType, mealString]) => {
+                        const ingredients = parseMealToIngredients(mealString);
+                        ingredients.forEach(ingredient => {
+                            const key = ingredient.toLowerCase();
+                            if (!ingredientData[key]) {
+                                ingredientData[key] = {
+                                    count: 0,
+                                    meals: []
+                                };
+                            }
+                            ingredientData[key].count += 1;
+                            ingredientData[key].meals.push({
+                                person: person,
+                                day: day,
+                                mealType: mealType,
+                                fullMeal: mealString
+                            });
+                        });
+                    });
+                });
+            }
+            
+            return ingredientData;
+        }
+        
+        // Get combined shopping list with meal source tracking
+        function getCombinedIngredients(mealData) {
+            const combined = {};
+            
+            people.forEach(person => {
+                const personIngredients = getIngredientsForPerson(person, mealData);
+                Object.entries(personIngredients).forEach(([ingredient, ingredientData]) => {
+                    if (!combined[ingredient]) {
+                        combined[ingredient] = {
+                            count: 0,
+                            meals: []
+                        };
+                    }
+                    combined[ingredient].count += ingredientData.count;
+                    combined[ingredient].meals.push(...ingredientData.meals);
+                });
+            });
+            
+            return combined;
+        }
+        
+        // Display ingredients in the UI with meal source tracking
+        function displayIngredients(ingredientData, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            if (Object.keys(ingredientData).length === 0) {
+                container.innerHTML = '<div style="color: #6c757d; font-style: italic;">No ingredients found</div>';
+                return;
+            }
+            
+            // Sort ingredients alphabetically
+            const sortedIngredients = Object.entries(ingredientData)
+                .sort(([a], [b]) => a.localeCompare(b));
+            
+            sortedIngredients.forEach(([ingredient, data]) => {
+                const ingredientDiv = document.createElement('div');
+                const uniqueId = `ingredient-${containerId}-${ingredient.replace(/\s+/g, '-')}`;
+                
+                ingredientDiv.innerHTML = `
+                    <div class="ingredient-item" onclick="toggleMealSources('${uniqueId}')">
+                        <span class="ingredient-name">${ingredient}</span>
+                        <span class="ingredient-count">${data.count}</span>
+                    </div>
+                    <div id="${uniqueId}" class="meal-sources">
+                        ${data.meals.map(meal => `
+                            <div class="meal-source-item">
+                                <span class="meal-source-person">${meal.person}</span> - ${meal.day} ${meal.mealType}: ${meal.fullMeal}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(ingredientDiv);
+            });
+        }
+        
+        // Toggle meal sources visibility
+        function toggleMealSources(elementId) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.classList.toggle('show');
+            }
+        }
+        
+        // Update all ingredient displays
+        function updateIngredientDisplays() {
+            const mealData = collectMealData();
+            
+            // Individual person ingredients
+            const keanuIngredients = getIngredientsForPerson('keanu', mealData);
+            const amaruIngredients = getIngredientsForPerson('amaru', mealData);
+            const combinedIngredients = getCombinedIngredients(mealData);
+            
+            displayIngredients(keanuIngredients, 'keanu-ingredients');
+            displayIngredients(amaruIngredients, 'amaru-ingredients');
+            displayIngredients(combinedIngredients, 'combined-ingredients');
+        }
+        
+        // Collect all meal data into structured object
+        function collectMealData() {
+            const mealData = {};
+            
+            people.forEach(person => {
+                mealData[person] = {};
+                days.forEach(day => {
+                    const fullDayName = {
+                        'mon': 'Monday',
+                        'tue': 'Tuesday', 
+                        'wed': 'Wednesday',
+                        'thu': 'Thursday',
+                        'fri': 'Friday',
+                        'sat': 'Saturday',
+                        'sun': 'Sunday'
+                    }[day];
+                    
+                    mealData[person][fullDayName] = {};
+                    meals.forEach(meal => {
+                        const inputId = `${person}-${meal}-${day}`;
+                        const inputValue = document.getElementById(inputId).value || '';
+                        mealData[person][fullDayName][meal] = inputValue;
+                    });
+                });
+            });
+            
+            return mealData;
+        }
+        
+        // Save changes back to sample-meal-data.json via API
+        async function saveToJsonFile() {
+            const mealData = collectMealData();
+            
+            try {
+                const response = await fetch('/api/meals', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(mealData)
+                });
+                
+                if (response.ok) {
+                    console.log('Meal data saved to sample-meal-data.json successfully');
+                    return mealData;
+                } else {
+                    throw new Error('Failed to save to server');
+                }
+            } catch (error) {
+                console.log('Server not available, saving to localStorage:', error);
+                localStorage.setItem('mealPlanData', JSON.stringify(mealData, null, 2));
+                return mealData;
+            }
+        }
+        
+        // Load data from sample-meal-data.json via API
+        async function loadMealData() {
+            try {
+                const response = await fetch('/api/meals');
+                if (response.ok) {
+                    const mealData = await response.json();
+                    populateFormWithData(mealData);
+                    console.log('Loaded meal data from server');
+                } else {
+                    throw new Error('Failed to load from server');
+                }
+            } catch (error) {
+                console.log('Server not available, trying direct file access:', error);
+                try {
+                    const response = await fetch('./sample-meal-data.json');
+                    if (response.ok) {
+                        const mealData = await response.json();
+                        populateFormWithData(mealData);
+                        console.log('Loaded meal data from sample-meal-data.json');
+                    } else {
+                        throw new Error('Could not load file');
+                    }
+                } catch (fileError) {
+                    console.log('Could not load file, trying localStorage:', fileError);
+                    const savedData = localStorage.getItem('mealPlanData');
+                    if (savedData) {
+                        const mealData = JSON.parse(savedData);
+                        populateFormWithData(mealData);
+                        console.log('Loaded meal data from localStorage');
+                    }
+                }
+            }
+        }
+        
+        // Populate form inputs with loaded data
+        function populateFormWithData(mealData) {
+            people.forEach(person => {
+                if (mealData[person]) {
+                    Object.keys(mealData[person]).forEach(dayName => {
+                        const dayKey = Object.keys({
+                            'Monday': 'mon',
+                            'Tuesday': 'tue', 
+                            'Wednesday': 'wed',
+                            'Thursday': 'thu',
+                            'Friday': 'fri',
+                            'Saturday': 'sat',
+                            'Sunday': 'sun'
+                        }).find(key => key === dayName);
+                        
+                        const shortDay = {
+                            'Monday': 'mon',
+                            'Tuesday': 'tue', 
+                            'Wednesday': 'wed',
+                            'Thursday': 'thu',
+                            'Friday': 'fri',
+                            'Saturday': 'sat',
+                            'Sunday': 'sun'
+                        }[dayName];
+                        
+                        if (shortDay && mealData[person][dayName]) {
+                            meals.forEach(meal => {
+                                const inputId = `${person}-${meal}-${shortDay}`;
+                                const inputElement = document.getElementById(inputId);
+                                if (inputElement && mealData[person][dayName][meal]) {
+                                    inputElement.value = mealData[person][dayName][meal];
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
+        
+        // Manual save button function
+        async function saveMealPlan() {
+            try {
+                await saveToJsonFile();
+                document.getElementById('status').textContent = 'Meal plan saved to sample-meal-data.json!';
+                document.getElementById('status').style.color = '#27ae60';
+            } catch (error) {
+                document.getElementById('status').textContent = 'Saved to localStorage (server not available)';
+                document.getElementById('status').style.color = '#e67e22';
+            }
+            
+            setTimeout(() => {
+                document.getElementById('status').textContent = '';
+            }, 4000);
+        }
+        
+        // Auto-save functionality with debouncing
+        let saveTimeout;
+        document.addEventListener('input', function(e) {
+            if (e.target.type === 'text') {
+                // Update ingredients immediately when typing
+                updateIngredientDisplays();
+                
+                // Debounced auto-save (wait 2 seconds after last input)
+                clearTimeout(saveTimeout);
+                saveTimeout = setTimeout(() => {
+                    saveToJsonFile();
+                    document.getElementById('status').textContent = 'Auto-saved!';
+                    document.getElementById('status').style.color = '#3498db';
+                    setTimeout(() => {
+                        document.getElementById('status').textContent = '';
+                    }, 2000);
+                }, 2000);
+            }
+        });
+        
+        // Load data on page load
+        window.addEventListener('load', async function() {
+            await loadMealDatabase();
+            await loadMealData();
+            // Update ingredients after data is loaded
+            updateIngredientDisplays();
+        });
+    </script>
+</body>
+</html>
